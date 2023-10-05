@@ -1,7 +1,5 @@
+import { redis } from "../config/redis"
 import { prisma } from "../config/prisma"
-import { Patient } from "../entities/Patient"
-
-const queuePatients: Patient[] = []
 
 async function enqueuePatient(id: number) {
 	try {
@@ -11,13 +9,7 @@ async function enqueuePatient(id: number) {
 			},
 		})
 
-		queuePatients.push({
-			cpf: patient.cpf,
-			name: patient.name,
-			createdAt: patient.createdAt,
-			id: String(patient.id),
-			updatedAt: patient.updatedAt,
-		})
+		await redis.lpush("queue-patients", JSON.stringify(patient))
 
 		return patient
 	} catch (error: any) {
@@ -27,11 +19,12 @@ async function enqueuePatient(id: number) {
 
 async function dequeuePatient() {
 	try {
-		if (queuePatients.length === 0) {
+		const listSize = await redis.llen("queue-patients")
+		if (listSize === 0) {
 			throw new Error("Queue is empty")
 		}
 
-		const patient = queuePatients.shift()
+		const patient = await redis.lpop("queue-patients")
 
 		return patient
 	} catch (error: any) {

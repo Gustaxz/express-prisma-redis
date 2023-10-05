@@ -18,7 +18,15 @@
 
     - Isso é meio firula, mas acho legal separar a lógica da parte http.
 
-5. Resumindo
+5. Redis
+
+    - Para usar o redis, acesse o arquivo config/redis.ts
+    - Para adicionar os pacientes, estou usando recurso de listas do redis. Existe outros tipos, mas com esse dá pra fazer ordenação e tal.
+    - Os comandos são bem simples. Começa com L de "lista" e logo em seguida vem a ação desejada. EX: LPUSH para fazer um push(adicionar a lista)
+    - Verfique em https://redis.io/docs/data-types/lists/
+    - Fiz uma implementação bem simples, mas acho que dá pra entender como funciona. Se encontra no arquivo services/queue-patient.ts
+
+6. Resumindo
 
     - O controller recebe a requisição, chama o service, o service chama o prisma, o prisma acessa o banco de dados e retorna o resultado para o service, o service retorna o resultado para o controller, o controller retorna o resultado para o client (Copilot pediu pra adicionar isso).
 
