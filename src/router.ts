@@ -1,10 +1,6 @@
 import express from "express"
-import {
-	dequeuePatientController,
-	enqueuePatientController,
-	getPatientByIdController,
-	postPatientController,
-} from "./controllers/patient"
+import { getPatientByIdController, postPatientController } from "./controllers/patient"
+import { dequeuePatientController, enqueuePatientController } from "./controllers/queue-patient"
 
 export const router = express.Router()
 
